@@ -5,10 +5,29 @@ Internet Technology - Project 2
     Oren Mendelow - om144
     Kevin Nehrbauer - kcn28
 
-2. Briefly discuss how you implemented the LS functionality of tracking which TS responded to the query and timing out if neither TS responded.
+2. Briefly discuss how you implemented the LS functionality of tracking which TS responded to the query and timing out
+if neither TS responded.
+
+    LS functionality was implemented using select(). LS queries the hostname on both ts1 and ts2, and then calls
+    select() to wait until data is available from either server or until the timeout occurs (5 seconds). Since recv() is
+    a blocking call, we only want to call it when we know we'll have data available. foundMatch is assigned the value
+    returned by select.select(). If a match is found, the socket address will be held in foundMatch[0]. LS checks if
+    foundMatch contains a socket address, if it's ts1 or ts2, and calls recv() on that socket to obtain the DNS result.
+    In the case of a timeout, select.select() will return after 5 seconds and foundMatch will not contain the address of
+    any socket.
 
 3. Are there known issues or functions that aren't working currently in your attached code? If so, explain.
 
+    We sure hope not.
+
 4. What problems did you face developing code for this project?
 
+    As expected, the toughest part was figuring out how to query multiple servers at once, setting a timeout for both,
+    and knowing which server responded, if either. Multi-threading wasn't cooperating and socket.settimeout() did not
+    perform the function required. Once settled on using select(), figuring out how to wait on multiple servers and then
+    know which server responded required a bit of digging through documentation.
+
 5. What did you learn by working on this project?
+
+    We learned how to implement a load-balancing DNS server by splitting the set of hostnames across multiple DNS
+    servers as well as how to handle simultaneous, potentially indefinite, processes.

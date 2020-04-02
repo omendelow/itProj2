@@ -6,7 +6,7 @@ dns = []
 
 
 def createDict():
-    inputFile = open("PROJI-DNSTS.txt", "r")
+    inputFile = open("PROJ2-DNSTS1.txt", "r")
     entries = inputFile.readlines()
     for i in entries:
         newEntry = i.split()
@@ -26,7 +26,7 @@ def lookUp(hostname):
             print("[S]: match found")
             return i[0] + " " + i[1] + " " + i[2]
     print("[S]: match not found")
-    return hostname + " - Error: HOST NOT FOUND"
+    return ""
 
 
 def server():
@@ -46,14 +46,14 @@ def server():
     csockid, addr = tss.accept()
     print ("[S]: Got a connection request from a client at", addr)
 
-    hostname = csockid.recv(100)
+    hostname = csockid.recv(200)
     while len(hostname) != 0:
-        csockid.send(lookUp(hostname))
-        hostname = csockid.recv(100)
-
+        searchResult = lookUp(hostname)
+        if len(searchResult) != 0:
+            csockid.send(searchResult)
+        hostname = csockid.recv(200)
     tss.close()
 
 
 createDict()
 server()
-lookUp("www.rutgers.")
