@@ -18,13 +18,13 @@ except mysoc.error as err:
 
 try:
     ts1Socket = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-    print("[S]: RS socket created")
+    print("[S]: ts1 socket created")
 except mysoc.error as err:
     print('{} \n'.format("socket open error ", err))
 
 try:
     ts2Socket = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-    print("[S]: RS socket created")
+    print("[S]: ts2 socket created")
 except mysoc.error as err:
     print('{} \n'.format("socket open error ", err))
 
